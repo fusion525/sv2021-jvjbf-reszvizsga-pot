@@ -3,7 +3,6 @@ package booking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +20,11 @@ public class Accommodation {
     public int price;
     public List<Integer> bookings = new ArrayList<>();
 
-    public Accommodation(String name, String city, int availableCapacity, int price) {
+    public Accommodation(Long id, String name, String city, int maxCapacity, int price) {
+        this.id = id;
         this.name = name;
         this.city = city;
-        this.availableCapacity = availableCapacity;
+        this.maxCapacity = maxCapacity;
         this.price = price;
     }
 }

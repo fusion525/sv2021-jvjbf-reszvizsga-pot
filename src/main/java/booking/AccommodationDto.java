@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class BookingDto {
+public class AccommodationDto {
 
     public Long id;
     public String name;

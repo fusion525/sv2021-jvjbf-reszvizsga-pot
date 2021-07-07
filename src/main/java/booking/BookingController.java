@@ -16,13 +16,20 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> listAccommodations(@RequestParam Optional<String> city) {
+    public List<AccommodationDto> listAccommodations(@RequestParam Optional<String> city) {
         return bookingService.listAccommodations(city);
     }
 
     @GetMapping("/{id}")
-    public BookingDto getAccommodationsById(@PathVariable("id") Long id) {
+    public AccommodationDto getAccommodationsById(@PathVariable("id") Long id) {
         return bookingService.getAccommodationsById(id);
+    }
+
+    @PostMapping
+    public AccommodationDto createAccommodation(
+            @RequestBody CreateAccommodationCommand command
+    ) {
+        return bookingService.createAccommodation(command);
     }
 
 
