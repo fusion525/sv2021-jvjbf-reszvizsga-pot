@@ -32,6 +32,21 @@ public class BookingController {
         return bookingService.createAccommodation(command);
     }
 
+    @PutMapping("/{id}")
+    public AccommodationDto updateAccommodation(@PathVariable("id") long id, @RequestBody UpdateAccommodationsCommand updateAccommodationsCommand) {
+        return bookingService.updateAccommodation(id, updateAccommodationsCommand);
+    }
+
+    @DeleteMapping
+    public void deleteAccommodations() {
+        bookingService.deleteAccommodations();
+    }
+
+    @PostMapping("/{id}/book")
+    public AccommodationDto createNewReservation(@PathVariable("id") long id, @RequestBody CreateReservationCommand createReservationCommand) {
+        return bookingService.createNewReservation(id, createReservationCommand);
+    }
+
 
 
 }

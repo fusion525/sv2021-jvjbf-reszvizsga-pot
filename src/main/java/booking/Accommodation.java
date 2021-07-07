@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Accommodation {
 
-    public Long id;
+    public long id;
     public String name;
     public String city;
     public int maxCapacity;
@@ -20,11 +20,12 @@ public class Accommodation {
     public int price;
     public List<Integer> bookings = new ArrayList<>();
 
-    public Accommodation(Long id, String name, String city, int maxCapacity, int price) {
+    public Accommodation(long id, String name, String city, int maxCapacity, int price) {
         this.id = id;
         this.name = name;
         this.city = city;
         this.maxCapacity = maxCapacity;
         this.price = price;
+        this.availableCapacity = maxCapacity;
     }
 }

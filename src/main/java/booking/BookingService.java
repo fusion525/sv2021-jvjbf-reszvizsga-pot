@@ -32,7 +32,7 @@ public class BookingService {
     }
 
 
-    public AccommodationDto getAccommodationsById(Long id) {
+    public AccommodationDto getAccommodationsById(long id) {
         return modelMapper.map(accommodations.stream()
                 .filter(a -> a.getId() == id).
                         findAny().orElseThrow(() -> new IllegalArgumentException("Accommodation not found " + id))
@@ -42,6 +42,24 @@ public class BookingService {
     public AccommodationDto createAccommodation(CreateAccommodationCommand command) {
         Accommodation accommodation = new Accommodation(idGenerator.incrementAndGet(), command.getName(), command.getCity(), command.getMaxCapacity(), command.getPrice());
         accommodations.add(accommodation);
+        return modelMapper.map(accommodation, AccommodationDto.class);
+    }
+
+    public AccommodationDto updateAccommodation(long id, UpdateAccommodationsCommand updateAccommodationsCommand) {
+        Accommodation accommodation = accommodations.stream().filter(a -> a.getId() == id).findFirst().
+                orElseThrow(() ->new IllegalArgumentException("Accommodation not found: " + id));
+        accommodation.setPrice(updateAccommodationsCommand.getPrice());
+        return modelMapper.map(accommodation, AccommodationDto.class);
+    }
+
+    public void deleteAccommodations() {
+        accommodations.clear();
+    }
+
+    public AccommodationDto createNewReservation(long id, CreateReservationCommand reservationCommand) {
+        Accommodation accommodation = accommodations.stream().filter(a -> a.getId() == id).findFirst()
+                .orElseThrow(()-> new IllegalArgumentException("Accommodation not found: " + id));
+        accommodation.setAvailableCapacity(accommodation.getAvailableCapacity() - reservationCommand.getNumberOfPeople());
         return modelMapper.map(accommodation, AccommodationDto.class);
     }
 }
