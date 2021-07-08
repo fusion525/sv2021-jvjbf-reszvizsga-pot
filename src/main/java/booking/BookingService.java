@@ -23,8 +23,8 @@ public class BookingService {
     }
 
 
-    public List<AccommodationDto> listAccommodations(Optional<String> city) {
-        Type targetListType = new TypeToken<List<AccommodationDto>>(){}.getType();
+    public List<AccommodationDTO> listAccommodations(Optional<String> city) {
+        Type targetListType = new TypeToken<List<AccommodationDTO>>(){}.getType();
         List<Accommodation> filteredAccommodations = accommodations.stream()
                 .filter(a -> city.isEmpty() || a.getCity().toLowerCase().startsWith(city.get().toLowerCase()))
                     .collect(Collectors.toList());
@@ -32,34 +32,61 @@ public class BookingService {
     }
 
 
-    public AccommodationDto getAccommodationsById(long id) {
+    public AccommodationDTO getAccommodationsById(long id) {
         return modelMapper.map(accommodations.stream()
                 .filter(a -> a.getId() == id).
-                        findAny().orElseThrow(() -> new IllegalArgumentException("Accommodation not found " + id))
-        , AccommodationDto.class);
+                        findAny().orElseThrow(() -> new IllegalStateException("Accommodation not found " + id))
+        , AccommodationDTO.class);
     }
 
-    public AccommodationDto createAccommodation(CreateAccommodationCommand command) {
+    public AccommodationDTO createAccommodation(CreateAccommodationCommand command) {
+
+        if (command.getMaxCapacity() < 10) {
+            throw new IllegalArgumentException();
+        }
+
+        if (command.getName().equals("")) {
+            throw new IllegalArgumentException();
+        }
+
+        if (command.getCity().equals("")) {
+            throw new IllegalArgumentException();
+        }
+
         Accommodation accommodation = new Accommodation(idGenerator.incrementAndGet(), command.getName(), command.getCity(), command.getMaxCapacity(), command.getPrice());
         accommodations.add(accommodation);
-        return modelMapper.map(accommodation, AccommodationDto.class);
+        return modelMapper.map(accommodation, AccommodationDTO.class);
     }
 
-    public AccommodationDto updateAccommodation(long id, UpdateAccommodationsCommand updateAccommodationsCommand) {
+    public AccommodationDTO updateAccommodation(long id, UpdateAccommodationsCommand updateAccommodationsCommand) {
         Accommodation accommodation = accommodations.stream().filter(a -> a.getId() == id).findFirst().
-                orElseThrow(() ->new IllegalArgumentException("Accommodation not found: " + id));
+                orElseThrow(() ->new IllegalStateException("Accommodation not found: " + id));
         accommodation.setPrice(updateAccommodationsCommand.getPrice());
-        return modelMapper.map(accommodation, AccommodationDto.class);
+        return modelMapper.map(accommodation, AccommodationDTO.class);
     }
 
     public void deleteAccommodations() {
         accommodations.clear();
     }
 
-    public AccommodationDto createNewReservation(long id, CreateReservationCommand reservationCommand) {
+    public AccommodationDTO createNewReservation(long id, CreateReservationCommand reservationCommand) {
+
         Accommodation accommodation = accommodations.stream().filter(a -> a.getId() == id).findFirst()
-                .orElseThrow(()-> new IllegalArgumentException("Accommodation not found: " + id));
+                .orElseThrow(()-> new IllegalStateException("Accommodation not found: " + id));
         accommodation.setAvailableCapacity(accommodation.getAvailableCapacity() - reservationCommand.getNumberOfPeople());
-        return modelMapper.map(accommodation, AccommodationDto.class);
+
+        if (reservationCommand.getNumberOfPeople() > accommodation.getAvailableCapacity()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return modelMapper.map(accommodation, AccommodationDTO.class);
+    }
+
+    public AccommodationDTO updateAccommodationPrice(long id, UpdateAccommodationsCommand command) {
+        Accommodation accommodation = accommodations.stream().filter(a -> a.getId() == id).findFirst()
+                .orElseThrow(() -> new IllegalStateException("Accommodation not found: " + id));
+        accommodation.setPrice(command.getPrice());
+
+        return modelMapper.map(accommodation, AccommodationDTO.class);
     }
 }

@@ -2,11 +2,8 @@ package booking;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
-public class AccommodationDto {
+public class AccommodationDTO {
 
     public Long id;
     public String name;
@@ -14,7 +11,5 @@ public class AccommodationDto {
     public int maxCapacity;
     public int availableCapacity;
     public int price;
-    public List<Integer> bookings = new ArrayList<>();
-
 
 }

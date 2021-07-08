@@ -18,7 +18,6 @@ public class Accommodation {
     public int maxCapacity;
     public int availableCapacity;
     public int price;
-    public List<Integer> bookings = new ArrayList<>();
 
     public Accommodation(long id, String name, String city, int maxCapacity, int price) {
         this.id = id;
@@ -26,6 +25,6 @@ public class Accommodation {
         this.city = city;
         this.maxCapacity = maxCapacity;
         this.price = price;
-        this.availableCapacity = maxCapacity;
+        this.availableCapacity = this.maxCapacity;
     }
 }
