@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateReservationCommand {
+public class Violation {
 
-    private int numberOfPeople;
-
+    private String field;
+    private String message;
 }

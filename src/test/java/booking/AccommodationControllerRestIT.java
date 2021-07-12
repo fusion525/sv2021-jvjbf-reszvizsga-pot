@@ -108,10 +108,10 @@ public class AccommodationControllerRestIT {
                 new CreateAccommodationCommand("Hotel Cool","New York",1200,300),
                 AccommodationDTO.class);
 
-       AccommodationDTO result = template.postForObject("/api/accommodations/1/book", new CreateReservationCommand(5), AccommodationDTO.class);
+       AccommodationDTO result = template.postForObject("/api/accommodations/1/book", new CreateReservationCommand(15), AccommodationDTO.class);
 
 
-        assertEquals(1195, result.getAvailableCapacity());
+        assertEquals(1185, result.getAvailableCapacity());
 
 
     }
